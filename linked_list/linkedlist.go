@@ -36,9 +36,12 @@ func (ll *linkedList) IsEmpty() bool {
 func (ll *linkedList) InsertAtFirst(a interface{}) {
 	newNode := &node{prev: nil, next: ll.head, data: a}
 	if ll.IsEmpty() {
+		ll.head = newNode
 		ll.tail = newNode
+	} else {
+		ll.head.prev = newNode
+		ll.head = newNode
 	}
-	ll.head = newNode
 	ll.size = ll.size + 1
 }
 
@@ -50,13 +53,12 @@ func (ll *linkedList) InsertAtLast(a interface{}) {
 }
 
 func (ll *linkedList) InsertAt(idx int, a interface{}) {
+	ll.validateIndex(idx)
 	curr := ll.nodeAt(idx)
 	if curr.prev == nil {
 		ll.InsertAtFirst(a)
-		ll.size = ll.size + 1
 	} else if curr.next == nil {
 		ll.InsertAtLast(a)
-		ll.size = ll.size + 1
 	} else {
 		newNode := &node{prev: curr.prev, next: curr, data: a}
 		curr.prev.next = newNode
@@ -112,9 +114,11 @@ func (ll *linkedList) RemoveAt(idx int) {
 
 func (ll *linkedList) Remove(a interface{}) {
 	curr, _ := ll.search(a)
-	curr.prev.next = curr.next
-	curr.next.prev = curr.prev
-	ll.size = ll.size - 1
+	if curr != nil {
+		curr.prev.next = curr.next
+		curr.next.prev = curr.prev
+		ll.size = ll.size - 1
+	}
 }
 
 func (ll *linkedList) IndexOf(a interface{}) int {
@@ -127,7 +131,7 @@ func (ll *linkedList) PeekFirst() interface{} {
 }
 
 func (ll *linkedList) PeekLast() interface{} {
-	curr := ll.nodeAt(ll.size)
+	curr := ll.nodeAt(ll.size - 1)
 	return curr.data
 }
 

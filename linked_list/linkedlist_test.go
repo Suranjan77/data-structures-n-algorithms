@@ -17,6 +17,53 @@ func TestInsertAtFirst(t *testing.T) {
 	}
 }
 
+func TestInsertAtZero(t *testing.T) {
+	linkedList := NewLinkedList()
+	linkedList.Insert(6)
+	linkedList.Insert(7)
+	linkedList.InsertAt(0, 5)
+	seq := reflect.DeepEqual(*linkedList.ToSlice(), []interface{}{5, 6, 7})
+	siz := linkedList.Size() == 3
+	if !seq || !siz {
+		t.Fail()
+	}
+}
+
+func TestInsertAtEnd(t *testing.T) {
+	linkedList := NewLinkedList()
+	linkedList.Insert(6)
+	linkedList.Insert(7)
+	linkedList.InsertAt(1, 5)
+	seq := reflect.DeepEqual(*linkedList.ToSlice(), []interface{}{6, 7, 5})
+	siz := linkedList.Size() == 3
+	if !seq || !siz {
+		t.Fail()
+	}
+}
+
+func TestRemoveEmptyList(t *testing.T) {
+	linkedList := NewLinkedList()
+	linkedList.Remove(5)
+	eq := len(*linkedList.ToSlice())
+	if eq != 0 {
+		t.Fail()
+	}
+}
+
+func TestRemoveOutOfIndex(t *testing.T) {
+
+	defer func() {
+		if r := recover(); r == nil {
+			t.Fail()
+		}
+	}()
+
+	linkedList := NewLinkedList()
+	linkedList.Insert(10)
+	linkedList.Insert(50)
+	linkedList.RemoveAt(10)
+}
+
 func TestInsert(t *testing.T) {
 	linkedList := NewLinkedList()
 	linkedList.Insert(6)
@@ -108,6 +155,54 @@ func TestRemoveAt(t *testing.T) {
 	linkedList.RemoveAt(linkedList.Size() - 1)
 	seq3 := reflect.DeepEqual(*linkedList.ToSlice(), []interface{}{5})
 	if !seq || !seq2 || !seq3 {
+		t.Fail()
+	}
+}
+
+func TestPeekFirst(t *testing.T) {
+	linkedList := NewLinkedList()
+	linkedList.Insert(6)
+	linkedList.Insert(7)
+	linkedList.Insert(5)
+	linkedList.Insert(10)
+	seq := linkedList.PeekFirst() == 6
+	if !seq {
+		t.Fail()
+	}
+}
+
+func TestPeekLast(t *testing.T) {
+	linkedList := NewLinkedList()
+	linkedList.Insert(6)
+	linkedList.Insert(7)
+	linkedList.Insert(5)
+	linkedList.Insert(10)
+	seq := linkedList.PeekLast() == 10
+	if !seq {
+		t.Fail()
+	}
+}
+
+func TestPeekAt(t *testing.T) {
+	linkedList := NewLinkedList()
+	linkedList.Insert(6)
+	linkedList.Insert(7)
+	linkedList.Insert(5)
+	linkedList.Insert(10)
+	seq := linkedList.PeekAt(1) == 7
+	if !seq {
+		t.Fail()
+	}
+}
+
+func TestIndexOf(t *testing.T) {
+	linkedList := NewLinkedList()
+	linkedList.Insert(6)
+	linkedList.Insert(7)
+	linkedList.Insert(5)
+	linkedList.Insert(10)
+	seq := linkedList.IndexOf(5) == 2
+	if !seq {
 		t.Fail()
 	}
 }
