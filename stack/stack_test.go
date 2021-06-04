@@ -61,3 +61,14 @@ func TestPeek(t *testing.T) {
 	}
 
 }
+
+func TestPeekOnEmptyStack(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Fail()
+		}
+	}()
+
+	s := Stack{}
+	s.Peek()
+}
